@@ -97,8 +97,70 @@ body {
   pointer-events: none;
 }
 
-/* 모든 페이지 개별 배경 강제 */
-#landing, #quiz, #result, #loading {
+/* 광고 배너 */
+.tip-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: #444;
+  letter-spacing: 2px;
+  text-align: center;
+  margin-bottom: 8px;
+}
+.tip-scroll-wrap {
+  width: 100%;
+  max-width: 340px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.tip-scroll-wrap::-webkit-scrollbar { display: none; }
+.tip-track {
+  display: flex;
+  width: max-content;
+}
+.tip-card {
+  width: 300px;
+  flex-shrink: 0;
+  scroll-snap-align: start;
+  background: #141a14;
+  border: 1px solid #2a3a2a;
+  border-radius: 4px;
+  padding: 16px;
+  margin-right: 10px;
+  box-sizing: border-box;
+}
+.tip-card:last-child { margin-right: 0; }
+.tip-emoji { font-size: 26px; margin-bottom: 8px; }
+.tip-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+.tip-sub {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.tip-cta {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--green);
+  letter-spacing: 1px;
+  margin-top: 8px;
+}
+.tip-hint {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: #333;
+  letter-spacing: 1px;
+  text-align: center;
+  margin-top: 6px;
+}
+
+#loading {
   background: #0d0d0d !important;
   background-color: #0d0d0d !important;
   min-height: 100%;
@@ -221,10 +283,7 @@ body::before {
 
 /* QUIZ */
 #quiz {
-  min-height: 100vh;
-  padding: 36px 24px 80px;
-  max-width: 600px;
-  margin: 0 auto;
+  /* .page가 full-width fixed이므로 여기서 max-width 주면 쏠림 발생 */
 }
 .quiz-header {
   display: flex;
@@ -354,6 +413,18 @@ body::before {
 }
 
 .quiz-nav { display: flex; gap: 12px; margin-top: 36px; }
+/* 모바일에서 네비 버튼 항상 보이도록 */
+@media (max-height: 700px) {
+  .quiz-nav {
+    position: sticky;
+    bottom: 0;
+    background: #0d0d0d;
+    padding: 16px 0 8px;
+    margin-top: 20px;
+    border-top: 1px solid #1a2a1a;
+    z-index: 10;
+  }
+}
 .btn-prev {
   background: transparent;
   border: 1.5px solid var(--border);
@@ -615,6 +686,7 @@ body::before {
 .tip-title { font-weight: 700; font-size: 13px; margin-bottom: 7px; }
 .tip-text { font-size: 12px; color: var(--muted); line-height: 1.75; }
 
+
 .restart-area {
   text-align: center;
   padding: 36px 0 20px;
@@ -704,7 +776,7 @@ body::before {
 
 <!-- QUIZ -->
 <div id="quiz" class="page">
-  <div style="max-width:600px;margin:0 auto;padding:36px 24px 80px;background:#0d0d0d;min-height:100vh;">
+  <div style="max-width:600px;width:100%;margin:0 auto;padding:36px 24px 120px;background:#0d0d0d;min-height:100vh;box-sizing:border-box;">
     <div class="quiz-header">
       <div class="quiz-logo">R.I.P 🌿</div>
       <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
@@ -909,16 +981,46 @@ body::before {
 
 <!-- LOADING -->
 <div id="loading" class="page">
-  <div style="min-height:100vh;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;background:#0d0d0d;">
+  <div style="min-height:100vh;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;background:#0d0d0d;padding:24px;">
     <div class="loading-plant">🌿</div>
-    <div class="loading-text" id="loadingText">ANALYZING YOUR SPACE...</div>
-    <div class="loading-bar-wrap"><div class="loading-bar-fill"></div></div>
+    <div class="loading-text" id="loadingText">나에게 맞는 식물 찾는 중...</div>
+    <div class="loading-bar-wrap"><div class="loading-bar-fill" id="loadingBar"></div></div>
+    <div class="tip-label">PLANT TIP — 옆으로 스와이프 해보세요 👉</div>
+    <div class="tip-scroll-wrap">
+      <div class="tip-track">
+        <div class="tip-card">
+          <div class="tip-emoji">🪴</div>
+          <div class="tip-title">분갈이, 지금이 적기일 수 있어요</div>
+          <div class="tip-sub">뿌리가 화분 밖으로 나왔다면 봄이 분갈이 적기예요. 한 치수 큰 화분으로 옮겨주세요.</div>
+          <div class="tip-cta">💡 Rest in Plants 식물 팁</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-emoji">💧</div>
+          <div class="tip-title">물 주기, 요일보다 흙 상태로</div>
+          <div class="tip-sub">손가락 첫 마디까지 흙이 말랐을 때 주는 게 정답. 과습이 과건조보다 위험해요.</div>
+          <div class="tip-cta">💡 Rest in Plants 식물 팁</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-emoji">☀️</div>
+          <div class="tip-title">한국 아파트, 빛 부족이 정상이에요</div>
+          <div class="tip-sub">남향 창가에서 1m 이내가 가장 밝아요. 그보다 멀면 내음성 식물을 선택하세요.</div>
+          <div class="tip-cta">💡 Rest in Plants 식물 팁</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-emoji">🐾</div>
+          <div class="tip-title">반려동물, 식물 먹어도 괜찮을까요?</div>
+          <div class="tip-sub">몬스테라·포토스는 고양이에게 위험해요. 결과에서 반려동물 안전 여부를 꼭 확인하세요.</div>
+          <div class="tip-cta">💡 Rest in Plants 식물 팁</div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
 <!-- RESULT -->
 <div id="result" class="page">
-  <div style="max-width:700px;margin:0 auto;padding:40px 20px 80px;background:#0d0d0d;min-height:100vh;">
+  <div id="resultInner" style="max-width:700px;width:100%;margin:0 auto;padding:40px 20px 80px;background:#0d0d0d;min-height:100vh;box-sizing:border-box;">
     <div class="result-header">
       <div class="result-badge">YOUR PLANT PERSONA</div>
       <h2 class="result-title">당신의 식물을<br><span class="accent">찾았어요 🌿</span></h2>
@@ -1608,19 +1710,20 @@ function prevQ() {
 // ================================================================
 // LOADING
 // ================================================================
-var loadMsgs = ['ANALYZING YOUR SPACE...','CHECKING LIGHT CONDITIONS...','MATCHING YOUR VIBE...','CONSULTING THE PLANTS...','GENERATING PERSONA...'];
+var loadMsgs = ['나에게 맞는 식물 찾는 중...','빛 환경 분석 중...','공간 분위기 매칭 중...','식물 데이터베이스 탐색 중...','최적 식물 추려내는 중...','거의 다 됐어요!'];
 function showLoading() {
   goToPage('loading');
   var i = 0;
   var iv = setInterval(function() {
-    document.getElementById('loadingText').textContent = loadMsgs[i % loadMsgs.length];
+    document.getElementById('loadingText').textContent = loadMsgs[Math.min(i, loadMsgs.length - 1)];
     i++;
-  }, 440);
+  }, 700);
+
   setTimeout(function() {
     clearInterval(iv);
     buildResult();
     goToPage('result');
-  }, 2300);
+  }, 2500);
 }
 
 // ================================================================
@@ -1800,7 +1903,7 @@ function buildResult() {
             '<div class="care-item"><span class="care-icon">💦</span><span class="care-label">습도</span><span class="care-value">' + p.careItems.humidity + '</span></div>' +
           '</div>' +
         '</div>' +
-        '<a class="buy-btn" href="' + coupangUrl + '" target="_blank" rel="noopener sponsored" style="border-color:' + p.accent + ';color:' + p.accent + ';">🛒 쿠팡에서 구매하기 →</a>' +
+        '<a class="buy-btn" href="' + coupangUrl + '" target="_blank" rel="noopener sponsored" style="border-color:' + p.accent + ';color:' + p.accent + ';">🪴 이 식물 집에 들이기</a>' +
         '<p class="affiliate-note">이 링크는 쿠팡 파트너스 활동의 일환으로, 구매 시 일정 수수료를 제공받을 수 있습니다.</p>' +
       '</div>' +
     '</div>';
